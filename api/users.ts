@@ -1,6 +1,6 @@
 import { httpClient } from '@/lib/http-client';
 import type { IUser } from '@/types';
-import type { IApiResponse } from '@/types/http-client.types';
+import type { IApiResponse, IPaginatedResponse } from '@/types/http-client.types';
 
 export const usersApi = {
   getMe: () =>
@@ -8,8 +8,8 @@ export const usersApi = {
       method: 'GET',
     }),
 
-  getAll: (params?: { page?: number; limit?: number; search?: string }) =>
-    httpClient<{ users: IUser[]; total: number }>('/users', {
+  getAll: (params?: { offset?: number; limit?: number; email?: string }) =>
+    httpClient<IPaginatedResponse<IUser>>('/users', {
       method: 'GET',
       params,
     }),

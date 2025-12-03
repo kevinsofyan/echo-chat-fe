@@ -18,6 +18,13 @@ const getAuthToken = () => {
   return null;
 };
 
+const handleUnauthorized = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('auth-storage');
+    window.location.href = '/login';
+  }
+};
+
 export async function httpClient<T>(
   endpoint: string,
   options: IRequestOptions = {}
@@ -53,6 +60,15 @@ export async function httpClient<T>(
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        handleUnauthorized();
+        throw new ApiError(
+          response.status,
+          'Session expired. Please login again.',
+          data
+        );
+      }
+      
       throw new ApiError(
         response.status,
         data?.message || response.statusText,

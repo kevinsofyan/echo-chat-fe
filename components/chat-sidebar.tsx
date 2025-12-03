@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LogOut, Settings, MessageCircle, Hash, Users, Loader2, AlertCircle } from 'lucide-react';
+import { LogOut, Settings, MessageCircle, Hash, Users, Loader2, AlertCircle, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { IRoom } from '@/types';
+import { AddFriendsDialog } from './add-friends-dialog';
+import { FriendsListDialog } from './friends-list-dialog';
 
 interface IChatSidebarProps {
   user?: {
@@ -31,6 +33,8 @@ export function ChatSidebar({
   onLogout,
 }: IChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAddFriendsOpen, setIsAddFriendsOpen] = useState(false);
+  const [isFriendsListOpen, setIsFriendsListOpen] = useState(false);
 
   const filteredRooms = rooms.filter((room) =>
     room.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -69,9 +73,21 @@ export function ChatSidebar({
         </div>
         
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1">
-            <MessageCircle />
-            New Chat
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1"
+            onClick={() => setIsAddFriendsOpen(true)}
+          >
+            <UserPlus />
+            Add Friends
+          </Button>
+          <Button 
+            variant="outline" 
+            size="icon-sm"
+            onClick={() => setIsFriendsListOpen(true)}
+          >
+            <Users />
           </Button>
           <Button variant="ghost" size="icon-sm">
             <Settings />
@@ -161,6 +177,15 @@ export function ChatSidebar({
           <span>Online</span>
         </div>
       </div>
+
+      <AddFriendsDialog 
+        isOpen={isAddFriendsOpen}
+        onClose={() => setIsAddFriendsOpen(false)}
+      />
+      <FriendsListDialog 
+        isOpen={isFriendsListOpen}
+        onClose={() => setIsFriendsListOpen(false)}
+      />
     </aside>
   );
 }

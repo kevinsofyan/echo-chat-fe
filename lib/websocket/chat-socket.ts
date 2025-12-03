@@ -26,13 +26,11 @@ export function useChatSocket({ roomId, userId, token, onMessage, onError }: IUs
       const ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {
-        console.log('WebSocket connected');
         setIsConnected(true);
         reconnectAttemptsRef.current = 0;
       };
 
       ws.onmessage = (event) => {
-        console.log('📩 Received message:', event.data);
         try {
           const data = JSON.parse(event.data);
           
@@ -57,7 +55,6 @@ export function useChatSocket({ roomId, userId, token, onMessage, onError }: IUs
         if (reconnectAttemptsRef.current < maxReconnectAttempts) {
           reconnectAttemptsRef.current += 1;
           const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000);
-          console.log(`Reconnecting in ${delay}ms... (attempt ${reconnectAttemptsRef.current})`);
           reconnectTimeoutRef.current = setTimeout(connect, delay);
         }
       };

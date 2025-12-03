@@ -18,5 +18,10 @@ export const roomsApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  createDirectRoom: (userId: string) =>
+    httpClient<IApiResponse<IRoom>>(`/rooms/direct/${userId}`, {
+      method: 'POST',
+    }),
 };
 
